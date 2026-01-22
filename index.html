@@ -245,6 +245,7 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
+        position: relative;
       }
       @media (min-width: 1024px) {
         header .brand-mobile {
@@ -252,6 +253,46 @@
         }
         header {
           align-items: flex-start;
+        }
+      }
+
+      /* Icono de configuración */
+      .settings-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(12px);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        z-index: 50;
+      }
+      .settings-icon:hover {
+        background: var(--primary-blue);
+        transform: rotate(90deg) scale(1.1);
+        border-color: var(--primary-blue);
+      }
+      .settings-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: rgba(255, 255, 255, 0.8);
+        transition: fill 0.3s ease;
+      }
+      .settings-icon:hover svg {
+        fill: white;
+      }
+      @media (min-width: 1024px) {
+        .settings-icon {
+          top: 0%;
+          left: auto;
+          right: -19%;
         }
       }
 
@@ -330,8 +371,8 @@
 
       .filter-group select:focus {
         border-color: var(--primary-blue);
-        background: #fff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 4px 10px rgba(246, 28, 105, 0.2);
       }
 
       /* --- TAREAS --- */
@@ -737,51 +778,42 @@
           </svg>
           <span>CALENDARIO</span>
         </div>
-        <div
-          class="nav-item"
-          id="nav-links"
-          onclick="switchView('links', this)"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-          >
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="12" cy="5" r="1" />
-            <circle cx="12" cy="19" r="1" />
-          </svg>
-          <span>MÁS</span>
-        </div>
+
       </nav>
 
       <main>
         <!-- VISTA TAREAS -->
         <div id="view-tasks" class="view active">
           <header>
-            <div class="brand-mobile">
-              <img
-                src="logo.png"
-                alt="CEI Planner"
-                onerror="
-                  this.src =
-                    'https://cdn-icons-png.flaticon.com/512/2098/2098402.png'
-                "
-              />
-            </div>
-            <p
-              id="current-date"
-              style="
-                color: var(--text-gray);
-                font-size: 1rem;
-                font-weight: 700;
-                text-align: center;
-                width: 100%;
-                margin-bottom: 5px;
+          <!-- Icono de configuración -->
+          <div class="settings-icon" onclick="openSettingsModal()" title="Configuración">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+          </div>
+          
+          <div class="brand-mobile">
+            <img
+              src="logo.png"
+              alt="CEI Planner"
+              onerror="
+                this.src =
+                  'https://cdn-icons-png.flaticon.com/512/2098/2098402.png'
               "
-            ></p>
-          </header>
+            />
+          </div>
+          <p
+            id="current-date"
+            style="
+              color: var(--text-gray);
+              font-size: 1rem;
+              font-weight: 700;
+              text-align: center;
+              width: 100%;
+              margin-bottom: 5px;
+            "
+          ></p>
+        </header>
 
           <div class="filters-bar">
             <div class="filter-group">
@@ -840,370 +872,6 @@
           </div>
         </div>
 
-        <!-- VISTA ENLACES -->
-        <div id="view-links" class="view">
-          <style>
-            @keyframes float {
-              0%,
-              100% {
-                transform: translateY(0px);
-              }
-              50% {
-                transform: translateY(-10px);
-              }
-            }
-
-            @keyframes shimmer {
-              0% {
-                background-position: -1000px 0;
-              }
-              100% {
-                background-position: 1000px 0;
-              }
-            }
-
-            @keyframes fadeInUp {
-              from {
-                opacity: 0;
-                transform: translateY(30px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-
-            @keyframes rotate {
-              from {
-                transform: rotate(0deg);
-              }
-              to {
-                transform: rotate(360deg);
-              }
-            }
-
-            .links-header {
-              text-align: center;
-              margin-bottom: 40px;
-              animation: fadeInUp 0.6s ease-out;
-            }
-
-            .links-title {
-              font-size: 2.8rem;
-              font-weight: 900;
-              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              margin-bottom: 10px;
-              letter-spacing: -2px;
-            }
-
-            .links-subtitle {
-              font-size: 1.1rem;
-              color: var(--text-gray);
-              font-weight: 600;
-            }
-
-            .links-container {
-              max-width: 900px;
-              margin: 0 auto;
-              padding: 20px;
-            }
-
-            .link-card {
-              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
-              padding: 2px;
-              border-radius: 24px;
-              margin-bottom: 30px;
-              animation: fadeInUp 0.6s ease-out 0.2s backwards;
-              transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(246, 28, 105, 0.15);
-            }
-
-            .link-card:hover {
-              transform: translateY(-5px);
-              box-shadow: 0 8px 25px rgba(246, 28, 105, 0.25);
-            }
-
-            .link-card-inner {
-              background: transparent;
-              padding: 40px;
-              text-align: center;
-              position: relative;
-              overflow: hidden;
-            }
-
-            .link-card-inner::before {
-              content: "";
-              position: absolute;
-              top: -50%;
-              left: -50%;
-              width: 200%;
-              height: 200%;
-              background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(246, 28, 105, 0.03),
-                transparent
-              );
-              transform: rotate(45deg);
-              animation: shimmer 3s infinite;
-            }
-
-            .link-icon {
-              font-size: 4rem;
-              margin-bottom: 20px;
-              display: inline-block;
-              animation: float 3s ease-in-out infinite;
-              filter: drop-shadow(0 10px 20px rgba(246, 28, 105, 0.2));
-            }
-
-            .link-title {
-              font-size: 1.8rem;
-              font-weight: 900;
-              color: var(--text-dark);
-              margin-bottom: 15px;
-              position: relative;
-            }
-
-            .link-description {
-              font-size: 1rem;
-              color: var(--text-gray);
-              margin-bottom: 30px;
-              line-height: 1.6;
-              font-weight: 500;
-            }
-
-            .cbt-button {
-              display: inline-block;
-              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
-              color: white;
-              padding: 20px 50px;
-              border-radius: 50px;
-              text-decoration: none;
-              font-weight: 900;
-              font-size: 1.2rem;
-              transition: all 0.3s ease;
-              box-shadow: 0 10px 30px rgba(246, 28, 105, 0.3);
-              position: relative;
-              overflow: hidden;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-            }
-
-            .cbt-button::before {
-              content: "";
-              position: absolute;
-              top: 0;
-              left: -100%;
-              width: 100%;
-              height: 100%;
-              background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-              );
-              transition: left 0.5s;
-            }
-
-            .cbt-button:hover::before {
-              left: 100%;
-            }
-
-            .cbt-button:hover {
-              transform: translateY(-3px) scale(1.05);
-              box-shadow: 0 15px 40px rgba(246, 28, 105, 0.4);
-            }
-
-            .cbt-button:active {
-              transform: translateY(-1px) scale(1.02);
-            }
-
-            .coming-soon-card {
-              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
-              padding: 2px;
-              border-radius: 20px;
-              animation: fadeInUp 0.6s ease-out 0.4s backwards;
-              transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(246, 28, 105, 0.15);
-            }
-
-            .coming-soon-card:hover {
-              transform: translateY(-3px);
-              box-shadow: 0 6px 20px rgba(246, 28, 105, 0.25);
-            }
-
-            .coming-soon-inner {
-              background: transparent;
-              padding: 35px;
-              text-align: center;
-              position: relative;
-              overflow: hidden;
-            }
-
-            .coming-soon-inner::before {
-              content: "";
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(246, 28, 105, 0.02) 10px,
-                rgba(246, 28, 105, 0.02) 20px
-              );
-              pointer-events: none;
-            }
-
-            .coming-soon-text {
-              font-size: 1.3rem;
-              font-weight: 800;
-              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              margin: 0;
-              position: relative;
-              text-transform: uppercase;
-              letter-spacing: 2px;
-            }
-
-            .icon-placeholder {
-              width: 80px;
-              height: 80px;
-              margin: 0 auto 20px;
-              position: relative;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-
-            .icon-placeholder svg {
-              width: 100%;
-              height: 100%;
-              animation: float 2.5s ease-in-out infinite;
-              filter: drop-shadow(0 4px 12px rgba(246, 28, 105, 0.3));
-            }
-
-            @media (max-width: 768px) {
-              .links-title {
-                font-size: 2rem;
-              }
-
-              .links-container {
-                max-width: 100%;
-                margin: 0 auto;
-                padding: 0 20px;
-              }
-
-              .link-card {
-                margin: 0 auto;
-                max-width: 100%;
-              }
-
-              .link-card-inner {
-                padding: 30px 20px;
-              }
-
-              .link-icon {
-                font-size: 3rem;
-              }
-
-              .link-title {
-                font-size: 1.4rem;
-              }
-
-              .cbt-button {
-                padding: 16px 40px;
-                font-size: 1rem;
-              }
-
-              .icon-placeholder {
-                width: 60px;
-                height: 60px;
-              }
-            }
-          </style>
-
-          <div class="links-header">
-            <h1 class="links-title">Más Opciones</h1>
-            <p class="links-subtitle">
-              ⚙️ Configuración y herramientas adicionales
-            </p>
-          </div>
-
-          <div class="links-container" style="max-width: 700px; margin: 0 auto; padding: 0 20px;">
-            <!-- Cloud Backup Configuration -->
-            <div style="background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
-              <div class="link-icon" style="font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(246, 28, 105, 0.3));">☁️</div>
-              <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 15px; background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Respaldo en la Nube</h3>
-              <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 35px; font-size: 1rem; line-height: 1.6;">Configura la sincronización automática con GitHub Gists para mantener tus tareas seguras en la nube.</p>
-              
-              <!-- Indicador de última sincronización -->
-
-
-
-                
-                <!-- Indicador de última sincronización -->
-                <div style="background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%); padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-blue);">
-                  <p id="sync-indicator" style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--primary-blue); text-align: center;">
-                    <span id="sync-spinner" style="display: none;">🔄 Sincronizando...</span>
-                    <span id="sync-timestamp">⏱️ Sin sincronizar</span>
-                  </p>
-                </div>
-                
-                <div style="max-width: 500px; margin: 0 auto; text-align: center;">
-                  <div class="form-group" style="margin-bottom: 18px;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text-gray); text-transform: uppercase;">Token de GitHub</label>
-                    <input 
-                      type="password" 
-                      id="cloud-token" 
-                      placeholder="ghp_xxxxxxxxxxxxx"
-                      style="width: 100%; padding: 12px 16px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-size: 1rem; outline: none; background: rgba(30, 41, 59, 0.6); color: #ffffff; transition: all 0.2s;"
-                    />
-                  </div>
-                  
-                  <div class="form-group" style="margin-bottom: 25px; text-align: left;">
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text-gray); text-transform: uppercase;">ID del Gist</label>
-                    <input 
-                      type="text" 
-                      id="cloud-gist-id" 
-                      placeholder="23455b6712621069868235bcb3eb838b"
-                      style="width: 100%; padding: 12px 16px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-size: 1rem; outline: none; background: rgba(30, 41, 59, 0.6); color: #ffffff; transition: all 0.2s;"
-                    />
-                  </div>
-                  
-                  <div style="display: flex; gap: 12px; margin-bottom: 15px; justify-content: center;">
-                    <button 
-                      onclick="saveCloudConfig()" 
-                      style="flex: 1; max-width: 200px; background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%); color: white; padding: 14px 20px; border-radius: 12px; border: none; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(246, 28, 105, 0.3); text-transform: uppercase; letter-spacing: 0.5px;"
-                      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(246, 28, 105, 0.4)'"
-                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(246, 28, 105, 0.3)'"
-                    >
-                      💾 Guardar Config
-                    </button>
-                    
-                    <button 
-                      onclick="loadFromCloud()" 
-                      style="flex: 1; max-width: 200px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 20px; border-radius: 12px; border: none; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); text-transform: uppercase; letter-spacing: 0.5px;"
-                      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'"
-                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.3)'"
-                    >
-                      ⬇️ Descargar
-                    </button>
-                  </div>
-                  
-                  <p id="cloud-status" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center;"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
     </div>
 
@@ -1281,6 +949,57 @@
       </div>
     </div>
 
+    <!-- MODAL: CONFIGURACIÓN -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-content" style="max-width: 600px;">
+        <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; text-align: center; background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">⚙️ Configuración</h3>
+        <p style="color: var(--text-gray); text-align: center; margin-bottom: 30px; font-size: 0.95rem;">Respaldo en la nube con GitHub Gists</p>
+        
+        <!-- Indicador de última sincronización -->
+        <div style="background: rgba(30, 41, 59, 0.6); padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
+          <p id="sync-indicator-modal" style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center;">
+            <span id="sync-spinner-modal" style="display: none;">🔄 Sincronizando...</span>
+            <span id="sync-timestamp-modal">⏱️ Sin sincronizar</span>
+          </p>
+        </div>
+        
+        <div class="form-group">
+          <label>Token de GitHub</label>
+          <input 
+            type="password" 
+            id="cloud-token-modal" 
+            placeholder="ghp_xxxxxxxxxxxxx"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label>ID del Gist</label>
+          <input 
+            type="text" 
+            id="cloud-gist-id-modal" 
+            placeholder="23455b6712621069868235bcb3eb838b"
+          />
+        </div>
+        
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="closeSettingsModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveCloudConfigFromModal()">💾 Guardar</button>
+        </div>
+        
+        <div style="margin-top: 15px; text-align: center;">
+          <button 
+            class="btn btn-primary" 
+            onclick="loadFromCloudFromModal()" 
+            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); width: 100%;"
+          >
+            ⬇️ Descargar desde la Nube
+          </button>
+        </div>
+        
+        <p id="cloud-status-modal" style="margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center;"></p>
+      </div>
+    </div>
+
     <script>
       // Datos de configuración por defecto
       const GIST_FILENAME = "cei_planner_tasks.json";
@@ -1350,13 +1069,9 @@
           nextView.style.transform = "translateY(0)";
           el.classList.add("active");
 
-          // Controlar visibilidad del botón FAB
+          // El botón FAB siempre está visible
           const fabButton = document.querySelector(".fab");
-          if (view === "links") {
-            fabButton.style.display = "none";
-          } else {
-            fabButton.style.display = "flex";
-          }
+          fabButton.style.display = "flex";
 
           if (view === "calendar") {
             renderCalendar();
@@ -1546,11 +1261,34 @@
         }
       }
 
-      // Función para guardar configuración de nube
-      async function saveCloudConfig() {
-        const token = document.getElementById("cloud-token").value.trim();
-        const gistId = document.getElementById("cloud-gist-id").value.trim();
-        const statusEl = document.getElementById("cloud-status");
+      // Funciones para el modal de configuración
+      function openSettingsModal() {
+        // Cargar valores actuales si existen
+        if (cloudConfig.token && cloudConfig.gistId) {
+          document.getElementById("cloud-token-modal").value = cloudConfig.token;
+          document.getElementById("cloud-gist-id-modal").value = cloudConfig.gistId;
+        }
+        
+        // Sincronizar indicador de timestamp
+        const timestamp = document.getElementById("sync-timestamp");
+        const timestampModal = document.getElementById("sync-timestamp-modal");
+        if (timestamp && timestampModal) {
+          timestampModal.innerHTML = timestamp.innerHTML;
+          timestampModal.style.color = timestamp.style.color;
+        }
+        
+        document.getElementById("settings-modal").style.display = "flex";
+      }
+      
+      function closeSettingsModal() {
+        document.getElementById("settings-modal").style.display = "none";
+        document.getElementById("cloud-status-modal").innerText = "";
+      }
+      
+      async function saveCloudConfigFromModal() {
+        const token = document.getElementById("cloud-token-modal").value.trim();
+        const gistId = document.getElementById("cloud-gist-id-modal").value.trim();
+        const statusEl = document.getElementById("cloud-status-modal");
         
         if (!token || !gistId) {
           statusEl.innerText = "⚠️ Por favor completa ambos campos";
@@ -1565,7 +1303,19 @@
         statusEl.style.color = "#10b981";
         
         // Realizar descarga inicial antes del primer guardado
+        await loadFromCloudFromModal();
+      }
+      
+      async function loadFromCloudFromModal() {
         await loadFromCloud();
+        
+        // Actualizar también el indicador del modal
+        const timestamp = document.getElementById("sync-timestamp");
+        const timestampModal = document.getElementById("sync-timestamp-modal");
+        if (timestamp && timestampModal) {
+          timestampModal.innerHTML = timestamp.innerHTML;
+          timestampModal.style.color = timestamp.style.color;
+        }
       }
       
       // Función para cargar datos desde la nube (PULL)
@@ -1910,6 +1660,7 @@
       window.addEventListener("click", (e) => {
         if (e.target.id === "task-modal") closeModal();
         if (e.target.id === "delete-modal") closeDeleteModal();
+        if (e.target.id === "settings-modal") closeSettingsModal();
       });
 
       // --- MOTOR DE PARTÍCULAS INTERACTIVO ---
@@ -1997,4 +1748,3 @@
     </script>
   </body>
 </html>
-
