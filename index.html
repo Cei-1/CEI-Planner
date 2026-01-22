@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Prevenir scroll inicial en móvil -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Planner</title>
     <!-- Icono de la pestaña configurado con logo.png -->
     <link rel="icon" type="image/png" href="logo.png" />
-    <!-- Manifest para PWA configurado con logo.png -->
+    <!-- Manifest para PWA configurado con logo.png - Cache bust para forzar actualizaciones -->
     <link
       rel="manifest"
-      href="data:application/json;base64,eyJuYW1lIjoiUGxhbm5lciIsInNob3J0X25hbWUiOiJQbGFubmVyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTIwMmMiLCJ0aGVtZV9jb2xvciI6IiNmNjFjNjkiLCJpY29ucyI6W3sic3JjIjoibG9nby5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJsb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19"
+      href="data:application/json;base64,eyJuYW1lIjoiUGxhbm5lciIsInNob3J0X25hbWUiOiJQbGFubmVyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTIwMmMiLCJ0aGVtZV9jb2xvciI6IiNmNjFjNjkiLCJpY29ucyI6W3sic3JjIjoibG9nby5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJsb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19?v=2026012207"
     />
     <style>
       :root {
@@ -35,6 +39,11 @@
         padding: 0;
         box-sizing: border-box;
         font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+      }
+      
+      html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
       }
 
       body {
@@ -1026,6 +1035,11 @@
       const urgencyLabels = { 1: "URGENTE", 2: "ALTA", 3: "MEDIA", 4: "BAJA" };
 
       window.addEventListener("load", async () => {
+        // FORZAR scroll al inicio en móvil
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        
         // Establecer fecha actual
         const dateStr = new Date().toLocaleDateString("es-ES", {
           weekday: "long",
