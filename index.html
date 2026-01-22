@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CEI Planner</title>
-    <!-- Icono de la pestaña configurado con tu archivo icono.png -->
-    <link rel="icon" type="image/png" href="icono.png" />
-    <!-- Manifest para PWA configurado con icono.png -->
+    <title>Planner</title>
+    <!-- Icono de la pestaña configurado con logo.png -->
+    <link rel="icon" type="image/png" href="logo.png" />
+    <!-- Manifest para PWA configurado con logo.png -->
     <link
       rel="manifest"
-      href="data:application/json;base64,eyJuYW1lIjoiRWR1Tm90ZSIsInNob3J0X25hbWUiOiJFZHVOb3RlIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiMwMDY2ZmYiLCJpY29ucyI6W3sic3JjIjoiaWNvbm8ucG5nIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbm8ucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0="
+      href="data:application/json;base64,eyJuYW1lIjoiUGxhbm5lciIsInNob3J0X25hbWUiOiJQbGFubmVyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTIwMmMiLCJ0aGVtZV9jb2xvciI6IiNmNjFjNjkiLCJpY29ucyI6W3sic3JjIjoibG9nby5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJsb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19"
     />
     <style>
       :root {
-        --primary-blue: #0066ff;
-        --light-blue: #f0f5ff;
-        --sidebar-blue: #eef4ff;
-        --text-dark: #121212;
-        --text-gray: #707070;
+        --primary-blue: #f61c69;
+        --light-blue: #fff0f6;
+        --sidebar-blue: #ffe8f3;
+        --text-dark: #f8f9fa;
+        --text-gray: rgba(255, 255, 255, 0.7);
         --border: #f0f0f0;
-        --border-blue: #d0e1f9;
+        --border-blue: #f9d0e1;
         --white: #ffffff;
         --danger: #ef4444;
 
@@ -38,12 +38,23 @@
       }
 
       body {
-        background-color: #ffffff;
+        background: #1a202c;
         color: var(--text-dark);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
+      }
+
+      /* Canvas de fondo con partículas */
+      #background-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(135deg, #0f172a, #1a202c, #0f172a);
       }
 
       /* --- LAYOUT ESTRUCTURAL --- */
@@ -58,12 +69,12 @@
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
         display: flex;
         justify-content: space-around;
         padding: 12px 0;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         z-index: 100;
       }
 
@@ -81,12 +92,13 @@
           justify-content: flex-start;
           padding: 40px 20px;
           border-top: none;
-          border-right: 1px solid var(--border-blue);
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
           background: linear-gradient(
             180deg,
-            var(--sidebar-blue) 0%,
-            #ffffff 100%
+            rgba(30, 41, 59, 0.8) 0%,
+            rgba(15, 23, 42, 0.8) 100%
           );
+          backdrop-filter: blur(12px);
         }
 
         .brand-pc {
@@ -133,6 +145,15 @@
 
         .nav-item.active::before {
           left: 0;
+        }
+
+        .nav-item {
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+          border-color: var(--primary-blue);
         }
       }
 
@@ -275,16 +296,21 @@
         width: 100%;
         padding: 8px 12px;
         border-radius: 25px;
-        border: 1.5px solid var(--border);
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
         font-size: 0.8rem;
         font-weight: 800;
-        color: var(--text-dark);
-        background-color: #f9f9f9;
+        color: #ffffff;
+        background-color: rgba(30, 41, 59, 0.8);
         outline: none;
         cursor: pointer;
         transition: all 0.2s;
         text-align: center;
-        appearance: none; /* Limpieza visual */
+        appearance: none;
+      }
+
+      .filter-group select option {
+        color: #ffffff;
+        background-color: rgba(30, 41, 59, 0.95);
       }
 
       @media (min-width: 1024px) {
@@ -292,8 +318,13 @@
           padding: 14px;
           border-radius: 12px;
           font-size: 1rem;
-          background-color: #fcfcfc;
+          background-color: rgba(30, 41, 59, 0.8);
+          color: rgba(255, 255, 255, 0.9);
           appearance: auto;
+        }
+        .filter-group select option {
+          color: #ffffff;
+          background-color: rgba(30, 41, 59, 0.95);
         }
       }
 
@@ -319,21 +350,22 @@
       }
 
       .task-card {
-        background: var(--white);
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
         display: flex;
         padding: 22px;
         border-radius: 18px;
         gap: 18px;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid var(--border);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         position: relative;
         align-items: center;
       }
       .task-card:hover {
         border-color: var(--primary-blue);
         transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 10px 20px rgba(246, 28, 105, 0.2);
       }
 
       /* Contenedor para botones de acción */
@@ -380,11 +412,11 @@
         font-size: 1.15rem;
         font-weight: 700;
         margin-bottom: 6px;
-        color: #1a1a1a;
+        color: #f8f9fa;
       }
       .task-title.completed {
         text-decoration: line-through;
-        color: var(--text-gray);
+        color: rgba(255, 255, 255, 0.5);
         opacity: 0.5;
       }
 
@@ -403,7 +435,7 @@
         display: flex;
         gap: 16px;
         font-size: 0.9rem;
-        color: var(--text-gray);
+        color: rgba(255, 255, 255, 0.7);
         font-weight: 600;
         align-items: center;
       }
@@ -434,10 +466,11 @@
 
       /* --- CALENDARIO MEJORADO --- */
       .calendar-container {
-        background: white;
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(12px);
         padding: 24px;
         border-radius: 20px;
-        border: 1px solid var(--border);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin-bottom: 30px;
       }
       .calendar-grid {
@@ -449,7 +482,7 @@
       .cal-header {
         font-weight: 800;
         padding: 12px 0;
-        color: var(--text-gray);
+        color: rgba(255, 255, 255, 0.6);
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -466,6 +499,7 @@
         font-size: 1rem;
         font-weight: 600;
         transition: all 0.2s;
+        color: rgba(255, 255, 255, 0.8);
       }
 
       /* Calendario más compacto en PC */
@@ -524,12 +558,14 @@
         justify-content: center;
       }
       .modal-content {
-        background: white;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(12px);
         width: 100%;
         border-radius: 30px 30px 0 0;
         padding: 35px 24px;
         animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         max-width: 600px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       @media (min-width: 768px) {
         .modal {
@@ -557,23 +593,24 @@
         font-size: 0.85rem;
         font-weight: 800;
         margin-bottom: 8px;
-        color: var(--text-gray);
+        color: rgba(255, 255, 255, 0.8);
         text-transform: uppercase;
       }
       input,
       select {
         width: 100%;
         padding: 14px;
-        border: 2px solid var(--border);
+        border: 2px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         font-size: 1rem;
         outline: none;
-        background: #fcfcfc;
+        background: rgba(30, 41, 59, 0.6);
+        color: #ffffff;
         transition: all 0.2s;
       }
       input:focus {
         border-color: var(--primary-blue);
-        background: #fff;
+        background: rgba(15, 23, 42, 0.6);
       }
 
       .btn-group {
@@ -599,8 +636,9 @@
         color: white;
       }
       .btn-secondary {
-        background: var(--border);
-        color: var(--text-gray);
+        background: transparent;
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
       }
       .btn:hover {
         filter: brightness(1.1);
@@ -643,12 +681,13 @@
       .empty {
         text-align: center;
         margin-top: 100px;
-        color: var(--text-gray);
+        color: rgba(255, 255, 255, 0.6);
         font-weight: 600;
       }
     </style>
   </head>
   <body>
+    <canvas id="background-canvas"></canvas>
     <div class="app-wrapper">
       <nav id="main-nav">
         <div class="brand-pc">
@@ -707,18 +746,13 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            stroke-width="2.5"
           >
-            <path
-              d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
-            />
-            <path
-              d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
-            />
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="5" r="1" />
+            <circle cx="12" cy="19" r="1" />
           </svg>
-          <span>ENLACES</span>
+          <span>MÁS</span>
         </div>
       </nav>
 
@@ -857,7 +891,7 @@
             .links-title {
               font-size: 2.8rem;
               font-weight: 900;
-              background: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               background-clip: text;
@@ -878,23 +912,22 @@
             }
 
             .link-card {
-              background: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
               padding: 2px;
               border-radius: 24px;
               margin-bottom: 30px;
               animation: fadeInUp 0.6s ease-out 0.2s backwards;
               transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(0, 102, 255, 0.15);
+              box-shadow: 0 4px 15px rgba(246, 28, 105, 0.15);
             }
 
             .link-card:hover {
               transform: translateY(-5px);
-              box-shadow: 0 8px 25px rgba(0, 102, 255, 0.25);
+              box-shadow: 0 8px 25px rgba(246, 28, 105, 0.25);
             }
 
             .link-card-inner {
-              background: white;
-              border-radius: 22px;
+              background: transparent;
               padding: 40px;
               text-align: center;
               position: relative;
@@ -911,7 +944,7 @@
               background: linear-gradient(
                 45deg,
                 transparent,
-                rgba(0, 102, 255, 0.03),
+                rgba(246, 28, 105, 0.03),
                 transparent
               );
               transform: rotate(45deg);
@@ -923,7 +956,7 @@
               margin-bottom: 20px;
               display: inline-block;
               animation: float 3s ease-in-out infinite;
-              filter: drop-shadow(0 10px 20px rgba(0, 102, 255, 0.2));
+              filter: drop-shadow(0 10px 20px rgba(246, 28, 105, 0.2));
             }
 
             .link-title {
@@ -944,7 +977,7 @@
 
             .cbt-button {
               display: inline-block;
-              background: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
               color: white;
               padding: 20px 50px;
               border-radius: 50px;
@@ -952,7 +985,7 @@
               font-weight: 900;
               font-size: 1.2rem;
               transition: all 0.3s ease;
-              box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+              box-shadow: 0 10px 30px rgba(246, 28, 105, 0.3);
               position: relative;
               overflow: hidden;
               text-transform: uppercase;
@@ -981,7 +1014,7 @@
 
             .cbt-button:hover {
               transform: translateY(-3px) scale(1.05);
-              box-shadow: 0 15px 40px rgba(0, 102, 255, 0.4);
+              box-shadow: 0 15px 40px rgba(246, 28, 105, 0.4);
             }
 
             .cbt-button:active {
@@ -989,22 +1022,21 @@
             }
 
             .coming-soon-card {
-              background: linear-gradient(135deg, #0066ff 0%, #4d94ff 100%);
+              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
               padding: 2px;
               border-radius: 20px;
               animation: fadeInUp 0.6s ease-out 0.4s backwards;
               transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(0, 102, 255, 0.15);
+              box-shadow: 0 4px 15px rgba(246, 28, 105, 0.15);
             }
 
             .coming-soon-card:hover {
               transform: translateY(-3px);
-              box-shadow: 0 6px 20px rgba(0, 102, 255, 0.25);
+              box-shadow: 0 6px 20px rgba(246, 28, 105, 0.25);
             }
 
             .coming-soon-inner {
-              background: white;
-              border-radius: 18px;
+              background: transparent;
               padding: 35px;
               text-align: center;
               position: relative;
@@ -1022,8 +1054,8 @@
                 45deg,
                 transparent,
                 transparent 10px,
-                rgba(0, 102, 255, 0.02) 10px,
-                rgba(0, 102, 255, 0.02) 20px
+                rgba(246, 28, 105, 0.02) 10px,
+                rgba(246, 28, 105, 0.02) 20px
               );
               pointer-events: none;
             }
@@ -1031,7 +1063,7 @@
             .coming-soon-text {
               font-size: 1.3rem;
               font-weight: 800;
-              background: linear-gradient(135deg, #0066ff 0%, #4d94ff 100%);
+              background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%);
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               background-clip: text;
@@ -1055,12 +1087,23 @@
               width: 100%;
               height: 100%;
               animation: float 2.5s ease-in-out infinite;
-              filter: drop-shadow(0 4px 12px rgba(0, 102, 255, 0.3));
+              filter: drop-shadow(0 4px 12px rgba(246, 28, 105, 0.3));
             }
 
             @media (max-width: 768px) {
               .links-title {
                 font-size: 2rem;
+              }
+
+              .links-container {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 0 20px;
+              }
+
+              .link-card {
+                margin: 0 auto;
+                max-width: 100%;
               }
 
               .link-card-inner {
@@ -1088,85 +1131,75 @@
           </style>
 
           <div class="links-header">
-            <h1 class="links-title">Enlaces Externos</h1>
+            <h1 class="links-title">Más Opciones</h1>
             <p class="links-subtitle">
-              ✨ Recursos educativos de calidad para tu aprendizaje
+              ⚙️ Configuración y herramientas adicionales
             </p>
           </div>
 
-          <div class="links-container">
-            <div class="link-card">
-              <div class="link-card-inner">
-                <div class="link-icon">🎓</div>
-                <h2 class="link-title">CBT José Antonio Alzate</h2>
-                <p class="link-description">
-                  Accede a todos los recursos y temas del Centro de Bachillerato
-                  Tecnológico. Encuentra materiales educativos, guías de estudio
-                  y contenido especializado.
-                </p>
-                <a
-                  href="https://sites.google.com/site/cbttemas"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="cbt-button"
-                >
-                  Visitar Sitio
-                </a>
-              </div>
-            </div>
+          <div class="links-container" style="max-width: 700px; margin: 0 auto; padding: 0 20px;">
+            <!-- Cloud Backup Configuration -->
+            <div style="background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
+              <div class="link-icon" style="font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(246, 28, 105, 0.3));">☁️</div>
+              <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 15px; background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Respaldo en la Nube</h3>
+              <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 35px; font-size: 1rem; line-height: 1.6;">Configura la sincronización automática con GitHub Gists para mantener tus tareas seguras en la nube.</p>
+              
+              <!-- Indicador de última sincronización -->
 
-            <div class="coming-soon-card">
-              <div class="coming-soon-inner">
-                <div class="icon-placeholder">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <linearGradient
-                        id="rocketGradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop
-                          offset="0%"
-                          style="stop-color: #0066ff; stop-opacity: 1"
-                        />
-                        <stop
-                          offset="100%"
-                          style="stop-color: #00d4ff; stop-opacity: 1"
-                        />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M12 2C12 2 6 8 6 13C6 16.31 8.69 19 12 19C15.31 19 18 16.31 18 13C18 8 12 2 12 2Z"
-                      fill="url(#rocketGradient)"
-                      stroke="url(#rocketGradient)"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <circle cx="12" cy="12" r="1.5" fill="white" />
-                    <path
-                      d="M9 19L7 22M15 19L17 22"
-                      stroke="#0066ff"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M7 13L3 14L4 16L7 15M17 13L21 14L20 16L17 15"
-                      fill="#0066ff"
-                      stroke="#0066ff"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+
+
+                
+                <!-- Indicador de última sincronización -->
+                <div style="background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%); padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-blue);">
+                  <p id="sync-indicator" style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--primary-blue); text-align: center;">
+                    <span id="sync-spinner" style="display: none;">🔄 Sincronizando...</span>
+                    <span id="sync-timestamp">⏱️ Sin sincronizar</span>
+                  </p>
                 </div>
-                <p class="coming-soon-text">Próximamente más enlaces</p>
+                
+                <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+                  <div class="form-group" style="margin-bottom: 18px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text-gray); text-transform: uppercase;">Token de GitHub</label>
+                    <input 
+                      type="password" 
+                      id="cloud-token" 
+                      placeholder="ghp_xxxxxxxxxxxxx"
+                      style="width: 100%; padding: 12px 16px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-size: 0.95rem; outline: none; background: rgba(30, 41, 59, 0.6); color: #ffffff; transition: all 0.2s;"
+                    />
+                  </div>
+                  
+                  <div class="form-group" style="margin-bottom: 25px; text-align: left;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text-gray); text-transform: uppercase;">ID del Gist</label>
+                    <input 
+                      type="text" 
+                      id="cloud-gist-id" 
+                      placeholder="23455b6712621069868235bcb3eb838b"
+                      style="width: 100%; padding: 12px 16px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-size: 0.95rem; outline: none; background: rgba(30, 41, 59, 0.6); color: #ffffff; transition: all 0.2s;"
+                    />
+                  </div>
+                  
+                  <div style="display: flex; gap: 12px; margin-bottom: 15px; justify-content: center;">
+                    <button 
+                      onclick="saveCloudConfig()" 
+                      style="flex: 1; max-width: 200px; background: linear-gradient(135deg, #f61c69 0%, #ff8ba7 100%); color: white; padding: 14px 20px; border-radius: 12px; border: none; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(246, 28, 105, 0.3); text-transform: uppercase; letter-spacing: 0.5px;"
+                      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(246, 28, 105, 0.4)'"
+                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(246, 28, 105, 0.3)'"
+                    >
+                      💾 Guardar Config
+                    </button>
+                    
+                    <button 
+                      onclick="loadFromCloud()" 
+                      style="flex: 1; max-width: 200px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 20px; border-radius: 12px; border: none; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); text-transform: uppercase; letter-spacing: 0.5px;"
+                      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'"
+                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.3)'"
+                    >
+                      ⬇️ Descargar
+                    </button>
+                  </div>
+                  
+                  <p id="cloud-status" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center;"></p>
+                </div>
               </div>
             </div>
           </div>
@@ -1235,7 +1268,7 @@
           ¿Eliminar tarea?
         </h3>
         <p style="color: var(--text-gray); margin-bottom: 30px">
-          Esta acción borrará el registro de CEI Planner permanentemente.
+          Esta acción borrará el registro de Planner permanentemente.
         </p>
         <div class="btn-group">
           <button class="btn btn-secondary" onclick="closeDeleteModal()">
@@ -1249,6 +1282,9 @@
     </div>
 
     <script>
+      // Datos de configuración por defecto
+      const GIST_FILENAME = "cei_planner_tasks.json";
+      
       let tasks = JSON.parse(localStorage.getItem("arden_tasks_pro")) || [];
       let currentMonth = new Date().getMonth();
       let currentYear = new Date().getFullYear();
@@ -1256,10 +1292,21 @@
       let selectedDateISO = null;
       let editingTaskId = null;
       let longPressTimer = null;
+      
+      // Inicializar con valores vacíos si no existen
+      let cloudConfig = JSON.parse(localStorage.getItem("cei_cloud_config")) || { 
+        token: "", 
+        gistId: "" 
+      };
+      
+      // Guardar config inicial si no existía
+      if (!localStorage.getItem("cei_cloud_config")) {
+        localStorage.setItem("cei_cloud_config", JSON.stringify(cloudConfig));
+      }
 
       const urgencyLabels = { 1: "URGENTE", 2: "ALTA", 3: "MEDIA", 4: "BAJA" };
 
-      window.addEventListener("load", () => {
+      window.addEventListener("load", async () => {
         renderTaskList();
         renderCalendar();
         const dateStr = new Date().toLocaleDateString("es-ES", {
@@ -1269,6 +1316,17 @@
         });
         document.getElementById("current-date").innerText =
           dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        
+        // Cargar configuración de nube
+        if (cloudConfig.token && cloudConfig.gistId) {
+          document.getElementById("cloud-token").value = cloudConfig.token;
+          document.getElementById("cloud-gist-id").value = cloudConfig.gistId;
+        }
+        
+        // Cargar tareas desde la nube automáticamente
+        if (cloudConfig.token && cloudConfig.gistId) {
+          await loadFromCloud();
+        }
       });
 
       function switchView(view, el) {
@@ -1456,6 +1514,171 @@
 
       function save() {
         localStorage.setItem("arden_tasks_pro", JSON.stringify(tasks));
+        // Disparar sincronización con la nube si está configurada
+        if (cloudConfig && cloudConfig.token && cloudConfig.gistId) {
+          syncToCloud(tasks);
+        }
+      }
+      
+      // Función para actualizar el indicador de sincronización
+      function updateSyncTimestamp(success = true) {
+        const timestampEl = document.getElementById("sync-timestamp");
+        const statusEl = document.getElementById("cloud-status");
+        const now = new Date();
+        const formatted = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        
+        if (timestampEl) {
+          if (success) {
+            timestampEl.innerHTML = `✅ Última sincronización: ${formatted}`;
+            timestampEl.style.color = "#10b981";
+          } else {
+            timestampEl.innerHTML = `❌ Error en sincronización`;
+            timestampEl.style.color = "#ef4444";
+          }
+        }
+      }
+      
+      // Función para mostrar/ocultar spinner de sincronización
+      function setSyncSpinner(show) {
+        const spinner = document.getElementById("sync-spinner");
+        const timestamp = document.getElementById("sync-timestamp");
+        if (spinner && timestamp) {
+          spinner.style.display = show ? "inline" : "none";
+          timestamp.style.display = show ? "none" : "inline";
+        }
+      }
+
+      // Función para guardar configuración de nube
+      function saveCloudConfig() {
+        const token = document.getElementById("cloud-token").value.trim();
+        const gistId = document.getElementById("cloud-gist-id").value.trim();
+        const statusEl = document.getElementById("cloud-status");
+        
+        if (!token || !gistId) {
+          statusEl.innerText = "⚠️ Por favor completa ambos campos";
+          statusEl.style.color = "#f97316";
+          return;
+        }
+        
+        cloudConfig = { token, gistId };
+        localStorage.setItem("cei_cloud_config", JSON.stringify(cloudConfig));
+        
+        statusEl.innerText = "✅ Configuración guardada correctamente";
+        statusEl.style.color = "#10b981";
+        
+        // Realizar primera sincronización
+        syncToCloud(tasks);
+      }
+      
+      // Función para cargar datos desde la nube (PULL)
+      async function loadFromCloud() {
+        if (!cloudConfig || !cloudConfig.token || !cloudConfig.gistId) {
+          const statusEl = document.getElementById("cloud-status");
+          if (statusEl) {
+            statusEl.innerText = "⚠️ Configura primero tu token y Gist ID";
+            statusEl.style.color = "#f97316";
+          }
+          return;
+        }
+        
+        setSyncSpinner(true);
+        const statusEl = document.getElementById("cloud-status");
+        
+        try {
+          const response = await fetch(`https://api.github.com/gists/${cloudConfig.gistId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `token ${cloudConfig.token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          
+          if (response.ok) {
+            const gistData = await response.json();
+            const fileContent = gistData.files[GIST_FILENAME]?.content;
+            
+            if (fileContent) {
+              const cloudTasks = JSON.parse(fileContent);
+              tasks = cloudTasks;
+              localStorage.setItem("arden_tasks_pro", JSON.stringify(tasks));
+              renderTaskList();
+              renderCalendar();
+              
+              console.log('✅ Datos cargados desde la nube');
+              if (statusEl) {
+                statusEl.innerText = "✅ Tareas descargadas exitosamente";
+                statusEl.style.color = "#10b981";
+              }
+              updateSyncTimestamp(true);
+            } else {
+              console.warn('⚠️ Archivo no encontrado en el Gist');
+              if (statusEl) {
+                statusEl.innerText = "⚠️ Archivo no encontrado en el Gist";
+                statusEl.style.color = "#f97316";
+              }
+              updateSyncTimestamp(false);
+            }
+          } else {
+            const error = await response.json();
+            console.error('❌ Error al cargar desde la nube:', error.message);
+            if (statusEl) {
+              statusEl.innerText = "❌ Error al descargar: " + (error.message || 'Error desconocido');
+              statusEl.style.color = "#ef4444";
+            }
+            updateSyncTimestamp(false);
+          }
+        } catch (error) {
+          console.error('❌ Error de red al cargar:', error);
+          if (statusEl) {
+            statusEl.innerText = "❌ Error de conexión al descargar";
+            statusEl.style.color = "#ef4444";
+          }
+          updateSyncTimestamp(false);
+        } finally {
+          setSyncSpinner(false);
+        }
+      }
+
+      // Función para sincronizar con GitHub Gists (PUSH)
+      async function syncToCloud(data) {
+        if (!cloudConfig || !cloudConfig.token || !cloudConfig.gistId) {
+          console.log("Cloud sync no configurado");
+          return;
+        }
+        
+        setSyncSpinner(true);
+        
+        try {
+          const response = await fetch(`https://api.github.com/gists/${cloudConfig.gistId}`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `token ${cloudConfig.token}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+              files: {
+                [GIST_FILENAME]: {
+                  content: JSON.stringify(data, null, 2)
+                }
+              }
+            })
+          });
+          
+          if (response.ok) {
+            console.log('✅ Sincronización exitosa con la nube');
+            updateSyncTimestamp(true);
+          } else {
+            const error = await response.json();
+            console.error('❌ Error en sincronización:', error.message);
+            updateSyncTimestamp(false);
+          }
+        } catch (error) {
+          console.error('❌ Error de red:', error);
+          updateSyncTimestamp(false);
+        } finally {
+          setSyncSpinner(false);
+        }
       }
 
       function renderTaskList() {
@@ -1644,6 +1867,89 @@
         if (e.target.id === "task-modal") closeModal();
         if (e.target.id === "delete-modal") closeDeleteModal();
       });
+
+      // --- MOTOR DE PARTÍCULAS INTERACTIVO ---
+      const canvas = document.getElementById("background-canvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      const numParticles = 85;
+      const maxDistance = 115;
+      let mouseX = 0,
+        mouseY = 0;
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.r = Math.random() * 1.5 + 0.5;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          let dx = mouseX - this.x;
+          let dy = mouseY - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 150) {
+            let force = (150 - distance) / 150;
+            this.x -= dx * force * 0.05;
+            this.y -= dy * force * 0.05;
+          }
+          if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+          if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(246, 28, 105, 0.4)";
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < numParticles; i++) particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+          p.update();
+          p.draw();
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < maxDistance) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(246, 28, 105, ${0.4 * (1 - dist / maxDistance)})`;
+              ctx.lineWidth = 0.3;
+              ctx.stroke();
+            }
+          }
+        });
+        requestAnimationFrame(animateParticles);
+      }
+
+      // Inicializar partículas al cargar
+      initParticles();
+      animateParticles();
+
+      // Actualizar posición del mouse para interactividad
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Reinicializar al cambiar tamaño de ventana
+      window.addEventListener("resize", initParticles);
+
     </script>
   </body>
 </html>
