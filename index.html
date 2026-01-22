@@ -1026,8 +1026,7 @@
       const urgencyLabels = { 1: "URGENTE", 2: "ALTA", 3: "MEDIA", 4: "BAJA" };
 
       window.addEventListener("load", async () => {
-        renderTaskList();
-        renderCalendar();
+        // Establecer fecha actual
         const dateStr = new Date().toLocaleDateString("es-ES", {
           weekday: "long",
           day: "numeric",
@@ -1036,16 +1035,14 @@
         document.getElementById("current-date").innerText =
           dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
         
-        // Cargar configuración de nube
-        if (cloudConfig.token && cloudConfig.gistId) {
-          document.getElementById("cloud-token").value = cloudConfig.token;
-          document.getElementById("cloud-gist-id").value = cloudConfig.gistId;
-        }
-        
-        // Cargar tareas desde la nube automáticamente
+        // PRIMERO: Intentar cargar desde la nube si está configurada
         if (cloudConfig.token && cloudConfig.gistId) {
           await loadFromCloud();
         }
+        
+        // DESPUÉS: Renderizar (con datos ya actualizados de la nube o locales si no hay nube)
+        renderTaskList();
+        renderCalendar();
       });
 
       function switchView(view, el) {
@@ -1387,7 +1384,7 @@
         }
       }
 
-      // Función para sincronizar con GitHub Gists (PUSH con FETCH y MERGE)
+      // Función para sincronizar con GitHub Gists (PUSH - Los datos locales tienen prioridad)
       async function syncToCloud(data) {
         if (!cloudConfig || !cloudConfig.token || !cloudConfig.gistId) {
           console.log("Cloud sync no configurado");
@@ -1397,46 +1394,8 @@
         setSyncSpinner(true);
         
         try {
-          // PASO 1: FETCH - Obtener datos actuales de la nube
-          const fetchResponse = await fetch(`https://api.github.com/gists/${cloudConfig.gistId}`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `token ${cloudConfig.token}`,
-              'Accept': 'application/vnd.github.v3+json'
-            }
-          });
-          
-          let mergedData = data;
-          
-          if (fetchResponse.ok) {
-            const gistData = await fetchResponse.json();
-            const cloudContent = gistData.files[GIST_FILENAME]?.content;
-            
-            if (cloudContent) {
-              // PASO 2: MERGE - Fusionar datos locales con los de la nube
-              const cloudTasks = JSON.parse(cloudContent);
-              
-              // Crear un mapa de tareas por ID para fusión eficiente
-              const taskMap = new Map();
-              
-              // Agregar tareas de la nube al mapa
-              cloudTasks.forEach(task => {
-                taskMap.set(task.id, task);
-              });
-              
-              // Agregar/actualizar con tareas locales (locales tienen prioridad)
-              data.forEach(task => {
-                taskMap.set(task.id, task);
-              });
-              
-              // Convertir el mapa de vuelta a array
-              mergedData = Array.from(taskMap.values());
-              
-              console.log(`🔄 Merge completado: ${cloudTasks.length} tareas en nube + ${data.length} locales = ${mergedData.length} fusionadas`);
-            }
-          }
-          
-          // PASO 3: PUSH - Guardar datos fusionados en la nube
+          // PUSH DIRECTO: Los datos locales son la fuente de verdad
+          // Si eliminaste algo localmente, debe eliminarse en la nube también
           const pushResponse = await fetch(`https://api.github.com/gists/${cloudConfig.gistId}`, {
             method: 'PATCH',
             headers: {
@@ -1447,7 +1406,7 @@
             body: JSON.stringify({
               files: {
                 [GIST_FILENAME]: {
-                  content: JSON.stringify(mergedData, null, 2)
+                  content: JSON.stringify(data, null, 2)
                 }
               }
             })
@@ -1456,12 +1415,6 @@
           if (pushResponse.ok) {
             console.log('✅ Sincronización exitosa con la nube');
             updateSyncTimestamp(true);
-            
-            // Actualizar localStorage con los datos fusionados
-            tasks = mergedData;
-            localStorage.setItem("arden_tasks_pro", JSON.stringify(tasks));
-            renderTaskList();
-            renderCalendar();
           } else {
             const error = await pushResponse.json();
             console.error('❌ Error en sincronización:', error.message);
